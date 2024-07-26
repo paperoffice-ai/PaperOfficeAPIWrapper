@@ -22,8 +22,8 @@ tests/input_folder/*
 tests/output_folder/*
 
 # Don't ignore the folders themselves
-!tests/input_folder/
-!tests/output_folder/
+!tests/input_folder/.gitkeep
+!tests/output_folder/.gitkeep
 
 # Ignore the api_processed_files folder completely
 tests/input_folder/api_processed_files/
