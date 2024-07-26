@@ -15,4 +15,4 @@ build/
 output/
 
 # Ignore all environment files in any directory
-**/*.env
+**/.env
