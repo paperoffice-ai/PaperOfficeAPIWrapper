@@ -2,8 +2,8 @@
 **/*.log
 
 # Ignore compiled Python files
-*.pyc
-__pycache__/
+**/*.pyc
+**/__pycache__/
 
 # Ignore virtual environment
 venv/
@@ -16,3 +16,14 @@ output/
 
 # Ignore all environment files in any directory
 **/.env
+
+# Ignore all files in input_folder and output_folder but keep the folders
+tests/input_folder/*
+tests/output_folder/*
+
+# Don't ignore the folders themselves
+!tests/input_folder/
+!tests/output_folder/
+
+# Ignore the api_processed_files folder completely
+tests/input_folder/api_processed_files/
