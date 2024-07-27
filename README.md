@@ -175,15 +175,22 @@ Modify the `api_file_processor_config.json` file in the `src` folder to specify 
 
 ## Running the Script
 
+After configuring the `.env` and `api_file_processor_config.json` files, execute:
+
 ### For Unix-based Systems (Linux, macOS)
 
-After configuring the `.env` and `api_file_processor_config.json` files, execute:
+
+```bash
+python3 src/main.py
+```
+
+### For Windows Users
 
 ```bash
 python src/main.py
 ```
 
-### For Windows Users
+A compiled executable PaperOfficeAPIWrapper_<version>.exe is available inside the windows directory. To use this:
 
 1. Navigate to the `windows` directory.
 2. Download `PaperOfficeAPIWrapper_<version>.exe`, `edit.env`, and `api_file_processor_config.json`.
