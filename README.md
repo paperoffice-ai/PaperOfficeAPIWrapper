@@ -190,13 +190,13 @@ python3 src/main.py
 python src/main.py
 ```
 
-A compiled executable `PaperOfficeAPIWrapper_<version>.exe` is available inside the windows directory. To use this:
+A compiled executable `com.paperoffice.apiwrapper.<release>.exe` is available inside the windows directory. To use this:
 
 1. Navigate to the `windows` directory.
-2. Download `PaperOfficeAPIWrapper_<version>.exe`, `edit.env`, and `api_file_processor_config.json`.
+2. Download `com.paperoffice.apiwrapper.<release>.exe`, `edit.env`, and `api_file_processor_config.json`.
 3. Place all files in the same folder.
 4. Configure `edit.env` and `api_file_processor_config.json` as described above.
-5. Run `PaperOfficeAPIWrapper_<version>.exe`.
+5. Run `com.paperoffice.apiwrapper.<release>.exe`.
 
 ## Troubleshooting
 
@@ -211,7 +211,7 @@ A compiled executable `PaperOfficeAPIWrapper_<version>.exe` is available inside 
 ## License
 **Custom Non-Commercial License**
 
-Copyright (c) 2024 PaperOffice AI
+Copyright (c) 2024 PaperOffice AI -> Copyright (c) 2024 PaperOffice Limited Europe
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, merge, and distribute the Software for non-commercial purposes only, subject to the following conditions:
 

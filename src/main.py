@@ -15,7 +15,7 @@ import requests
 from dotenv import load_dotenv
 
 
-# Check if the Python version is at least 3.10
+# Check if the Python version is at least 3.7
 if sys.version_info < (3, 7):
     print("ERROR: Python 3.7 or higher is required.")
     sys.exit(1)
