@@ -190,7 +190,7 @@ python3 src/main.py
 python src/main.py
 ```
 
-A compiled executable PaperOfficeAPIWrapper_<version>.exe is available inside the windows directory. To use this:
+A compiled executable `PaperOfficeAPIWrapper_<version>.exe` is available inside the windows directory. To use this:
 
 1. Navigate to the `windows` directory.
 2. Download `PaperOfficeAPIWrapper_<version>.exe`, `edit.env`, and `api_file_processor_config.json`.
