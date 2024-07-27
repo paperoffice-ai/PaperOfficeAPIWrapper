@@ -1,11 +1,11 @@
 {
     "folders": [
         {
-            "folder_path": "..\\tests\\input_folder",
-            "output_folder": "..\\tests\\output_folder",
+            "folder_path": "tests/input_folder",
+            "output_folder": "tests/output_folder",
             "endpoint": {
-                "url": "https://api-dev.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
-                "job_instructions_json": {"language":"en","txt":true,"type":"analog"}
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___compress_pdf",
+                "job_instructions_json": null
             }
         }
     ]

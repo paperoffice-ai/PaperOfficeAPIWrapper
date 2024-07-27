@@ -1,112 +1,219 @@
 # PaperOfficeAPIWrapper
 
-**PaperOfficeAPIWrapper** is a streamlined tool designed to automate file processing via API requests. Users can configure multiple folders to be processed, each with its own API endpoint. Configuration details, including folder paths and API endpoints, are specified in the `api_file_processor_config.json` file. Each file within the configured folders is sent to the designated API for processing, with results saved to specified output folders. This tool simplifies bulk file processing, making it efficient and customizable for various use cases.
+## Table of Contents
+1. [Overview](#overview)
+   - [Key Features](#key-features)
+2. [Getting Started](#getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+   - [Quick Start](#quick-start)
+3. [Usage Guide](#usage-guide)
+   - [Configuration](#configuration)
+     - [Set Up Environment Variables](#1-set-up-environment-variables)
+     - [Configure API and Folder Settings](#2-configure-api-and-folder-settings)
+   - [Running the Script](#running-the-script)
+4. [Troubleshooting](#troubleshooting)
+5. [License](#license)
 
+## Overview
 
-### Getting Started
+**PaperOfficeAPIWrapper** is a powerful and flexible tool designed to streamline file processing through automated API interactions. This utility empowers users to efficiently manage and process files across multiple directories, each with its own dedicated API endpoint.
 
-#### Prerequisites
-- Python 3.7+
-- pip
+### Key Features
 
-#### Installation
+- **Multi-folder Processing**: Configure and process files from multiple input folders simultaneously.
+- **Customizable API Endpoints**: Each folder can be linked to a specific API endpoint for tailored processing.
+- **Automated Workflow**: Files are automatically sent to designated APIs and results are saved to specified output locations.
+- **Configurable**: Easy-to-use JSON configuration file for setting up folders and API endpoints.
+- **Flexible Output Handling**: Processed files can be saved to custom output directories.
+- **Error Handling**: Robust error management to ensure smooth operation even with large batches of files.
 
-1. **Clone the repository:**
+## Getting Started
+
+### Prerequisites
+
+- Python 3.7 or higher
+- pip (Python package manager)
+- Git (for cloning the repository)
+
+### Installation
+
+1. **Clone the Repository**
+
+   Open a terminal and run:
 
    ```bash
    git clone https://github.com/paperoffice-ai/PaperOfficeAPIWrapper.git
    cd PaperOfficeAPIWrapper
    ```
 
-2. **Create a virtual environment and activate it:**
+2. **Set Up a Virtual Environment**
 
+   Create and activate a virtual environment to isolate the project dependencies:
+
+   For Unix-based systems (Linux, macOS):
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   python3 -m venv venv
+   source venv/bin/activate
    ```
 
-3. **Install the dependencies:**
+   For Windows:
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate
+   ```
+
+3. **Install Dependencies**
+
+   With the virtual environment activated, install the required packages:
 
    ```bash
    pip install -r requirements.txt
    ```
 
+### Quick Start
 
-### Usage
-
-#### Configuration
-
-1. **Edit the `edit.env` file:**
-
-   Edit the `edit.env` file in the `src` folder with your API key and configuration, then rename it to `.env`:
-
-   ```bash
-   mv src/edit.env src/.env
-   ```
-
-   For reference, this is the `edit.env` file:
-
-   ```plaintext
-   API_KEY=
-   LOG_LEVEL=INFO
-   LOG_FILE_MAX_MB=10
-   LOG_FILE_BACKUP_COUNT=5
-   ```
-
-   **Explanation:**
-   - **API_KEY**: If no API key is provided, the script will use our free tier.
-   - **LOG_LEVEL**: Log level default is `INFO`.
-   - **LOG_FILE_MAX_MB**: Maximum log file size is `10 MB` by default.
-   - **LOG_FILE_BACKUP_COUNT**: Default backup count for log files is `5`.
-
-2. **Configure the `api_file_processor_config.json` file:**
-
-   Ensure your configuration file (`api_file_processor_config.json`) in the `src` folder is set up as shown below. This file specifies the folders to process and the API endpoints to use.
-
-   ```json
-   {
-       "folders": [
-           {
-               "folder_path": "..\\tests\\input_folder",
-               "output_folder": "..\\tests\\output_folder",
-               "endpoint": {
-                   "url": "https://api-dev.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
-                   "job_instructions_json": {"language":"en","txt":true,"type":"analog"}
-               }
-           }
-       ]
-   }
-   ```
-
-   **Explanation:**
-   - **folder_path**: Path to the folder containing files to process.
-   - **output_folder**: Path to the folder where processed files will be saved.
-   - **url**: API endpoint URL.
-   - **job_instructions_json**: JSON object containing specific instructions for the API job.
-
-3. **Run the script:**
-
-   After configuring the `.env` and `api_file_processor_config.json` files, run the script:
+1. Configure your environment variables in `src/.env` (see Configuration section for details).
+2. Set up your folder and API configurations in `src/api_file_processor_config.json`.
+3. Run the main script:
 
    ```bash
    python src/main.py
    ```
 
-For Windows executable:
+
+# Usage Guide
+
+## Configuration
+
+### 1. Set Up Environment Variables
+
+Edit the `edit.env` file in the `src` folder with your API key and preferred settings, then rename it to `.env`:
 
 ```bash
-windows/your_script.exe
+mv src/edit.env src/.env
 ```
 
-## Development
-Development and experimental features can be tested in the `dev` folder.
+Example `edit.env` file:
 
-## Testing
-How to run tests:
+```plaintext
+API_KEY=your_api_key_here
+LOG_LEVEL=INFO
+LOG_FILE_MAX_MB=10
+LOG_FILE_BACKUP_COUNT=5
+```
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `API_KEY` | Your API key. If not provided, the script will use the free tier. | None |
+| `LOG_LEVEL` | Logging verbosity level | `INFO` |
+| `LOG_FILE_MAX_MB` | Maximum size of each log file in megabytes | `10` |
+| `LOG_FILE_BACKUP_COUNT` | Number of backup log files to keep | `5` |
+
+### 2. Configure API and Folder Settings
+
+Modify the `api_file_processor_config.json` file in the `src` folder to specify input/output folders and API endpoints. The configuration supports multiple folders, each with its own input/output paths and API endpoint.
+
+
+#### Example Configuration:
+
+```json
+{
+    "folders": [
+        {
+            "folder_path": "/path/to/input_folder1",
+            "output_folder": "/path/to/output_folder1",
+            "endpoint": {
+                "url": "https://api-dev.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
+                "job_instructions_json": {"language":"en"}
+            }
+        },
+        {
+            "folder_path": "/path/to/input_folder2",
+            "output_folder": "/path/to/output_folder2",
+            "endpoint": {
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___pdf_to_searchable_pdf",
+                "job_instructions_json": {"language":"en"}
+            }
+        }
+    ]
+}
+```
+
+#### Path Formatting:
+
+- **Unix-based Systems (Linux, macOS)**: Use forward slashes (`/`) in your paths.
+  ```json
+  "folder_path": "/home/user/my_input_folder"
+  ```
+
+- **Windows**: Use either of these formats:
+  1. Double backslashes:
+     ```json
+     "folder_path": "C:\\Users\\user\\my_input_folder"
+     ```
+  2. Forward slashes (also supported in Windows):
+     ```json
+     "folder_path": "C:/Users/user/my_input_folder"
+     ```
+
+#### Configuration Fields:
+
+| Field | Description |
+|-------|-------------|
+| `folder_path` | Directory containing files to process |
+| `output_folder` | Directory where processed files will be saved |
+| `url` | API endpoint URL for processing |
+| `job_instructions_json` | Specific instructions for the API job (e.g., language settings) |
+
+
+**Note:** 
+- Successfully processed files are moved to an `api_processed_files` subfolder within the input folder.
+- Ensure you have read/write permissions for all specified folders.
+- For more examples, refer to `api_file_processor_config_example.json` in the `src` folder.
+- **Important:** For a comprehensive list of all available endpoints and `job_instructions_json` parameters, please refer to our API documentation at: https://app-desktop.paperoffice.com/en/api
+
+## Running the Script
+
+### For Unix-based Systems (Linux, macOS)
+
+After configuring the `.env` and `api_file_processor_config.json` files, execute:
 
 ```bash
-pytest tests/
+python src/main.py
 ```
+
+### For Windows Users
+
+1. Navigate to the `windows` directory.
+2. Download `PaperOfficeAPIWrapper_<version>.exe`, `edit.env`, and `api_file_processor_config.json`.
+3. Place all files in the same folder.
+4. Configure `edit.env` and `api_file_processor_config.json` as described above.
+5. Run `PaperOfficeAPIWrapper_<version>.exe`.
+
+## Troubleshooting
+
+- Ensure all configuration files are in the correct locations.
+- Verify that your API key is valid and correctly entered in the `.env` file.
+- Check that the specified input and output folders exist and are accessible.
+- Review the log files for any error messages or warnings.
+- If you're unsure about the configuration format, refer to `api_file_processor_config_example.json` for guidance.
+
+
 
 ## License
-Include your project's license information here.
+**Custom Non-Commercial License**
+
+Copyright (c) 2024 PaperOffice AI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, merge, and distribute the Software for non-commercial purposes only, subject to the following conditions:
+
+1. The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+2. The Software may not be used for commercial purposes, including but not limited to selling the Software, selling services that utilize the Software, or incorporating the Software into a commercial product.
+
+3. Modifications to the Software must be clearly marked as such and must not be misrepresented as the original Software.
+
+4. No person or organization may claim endorsement or affiliation with the original authors or copyright holders without specific prior written permission.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

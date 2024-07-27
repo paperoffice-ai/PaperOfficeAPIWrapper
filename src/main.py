@@ -74,21 +74,32 @@ def clear_env_variables():
             del os.environ[var]
 
 
+# Determine the root path
+def get_root_path():
+    if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
+        root_path = Path(sys.executable).parent
+    else:
+        root_path = Path(__file__).resolve().parent
+    return root_path
+
+
 # Function to load and validate environment variables from a .env file
-def load_env_file():
+def load_env_file(root_path, env_file_name=".env"):
     logging.basicConfig(level=logging.DEBUG, format='[ %(asctime)s.%(msecs)05d %(funcName)s:%(lineno)d ] %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S', encoding='utf-8')
     
-    # Check if the .env file exists in the current directory
-    if not os.path.exists('.env'):
-        # Log an error and exit if the .env file is missing
-        logging.error('The ".env" file is missing. Please create the file and add your configuration settings.')
+    # Construct the full path to the .env file
+    env_file_path = root_path / env_file_name
+    
+    # Check if the .env file exists at the specified path
+    if not env_file_path.exists():
+        logging.error(f'The "{env_file_name}" file is missing at {env_file_path}. Please create the file and add your configuration settings.')
         sys_exit()
     
     # Clear relevant environment variables to ensure fresh load
     clear_env_variables() 
         
-    # Load the environment variables from the .env file
-    load_dotenv()
+    # Load the environment variables from the specified .env file
+    load_dotenv(dotenv_path=env_file_path)
     
     # Retrieve environment variables and store them in a dictionary
     env_config = {
@@ -131,15 +142,6 @@ def load_env_file():
     
     # Return the dictionary containing the environment configuration
     return env_config
-
-
-# Determine the root path
-def get_root_path():
-    if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
-        root_path = Path(sys.executable).parent
-    else:
-        root_path = Path(__file__).resolve().parent
-    return root_path
 
 
 # Check if json is well formatted
@@ -718,8 +720,8 @@ if __name__ == "__main__":
         start_time = time.time()
         start_datetime = datetime.now()
         
-        env_config = load_env_file()
-        root_path = get_root_path()      
+        root_path = get_root_path()
+        env_config = load_env_file(root_path)              
         setup_logging(root_path / "api_file_processor.log", env_config)        
         logging.debug("Debugging application flow - START")
         logging.debug(f'Loaded environment variables: {str(env_config)}')
