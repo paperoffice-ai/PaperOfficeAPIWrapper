@@ -570,6 +570,9 @@ class API_file_processor:
             # 1. Add job
             response_json, status_code = self.send_request_job_add(endpoint)
             
+            if not status_code:
+                continue
+            
             if not self.check_response_status_code(status_code, endpoint["url"]):
                 break
 
@@ -589,6 +592,9 @@ class API_file_processor:
             job_id = response_json["job_id"]            
             endpoint_url = f'https://{job_assigned_api_endpoint}/V5/job/upload/{job_id}'
             response_json, status_code = self.send_request_job_upload(endpoint_url, file)
+            
+            if not status_code:
+                continue
             
             if not self.check_response_status_code(status_code, endpoint_url):
                 break
@@ -610,8 +616,12 @@ class API_file_processor:
             skip_folder = False
             skip_file = False
             downloadlink = None
-            for i in range(45):
+            for i in range(100):
                 response_json, status_code = self.send_request_job_status(endpoint_url)
+                
+                if not status_code:
+                    skip_file = True
+                    break
                 
                 if not self.check_response_status_code(status_code, endpoint_url):
                     skip_folder = True
@@ -641,7 +651,7 @@ class API_file_processor:
                     skip_file = True
                     break
                 
-                if i >=20:
+                if i >= 30:
                     logging.error('File processing is taking too long, please try again.')
                     skip_file = True
                     break                    
