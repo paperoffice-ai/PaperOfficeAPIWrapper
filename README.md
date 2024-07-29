@@ -17,7 +17,19 @@
 
 ## Overview
 
-**PaperOfficeAPIWrapper** is a powerful and flexible tool designed to streamline file processing through automated API interactions. This utility empowers users to efficiently manage and process files across multiple directories, each with its own dedicated API endpoint.
+**PaperOfficeAPIWrapper** is a powerful utility designed to streamline file processing through automated API interactions. It enables efficient management and processing of files across multiple directories, each with its own dedicated API endpoint.
+
+- Available as a pre-compiled [Windows executable](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R247275/com.paperoffice.apiwrapper.R247275.exe)
+- Access to multiple PaperOffice endpoints, including:
+  - Katana Smart AI
+  - PDF Studio
+  - Image Studio
+  - Vision API
+  - Creator API
+  - Interceptor API
+  - Forexbroker API
+
+For a complete list of available endpoints and detailed usage instructions, please refer to our [API documentation](https://app-desktop.paperoffice.com/en/api).
 
 ### Key Features
 
