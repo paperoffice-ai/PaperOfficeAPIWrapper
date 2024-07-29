@@ -29,7 +29,7 @@
   - Interceptor API
   - Forexbroker API
 
-For a complete list of available endpoints and detailed usage instructions, please refer to our [API documentation](https://app-desktop.paperoffice.com/en/api).
+For a complete list of available endpoints, please refer to our [API documentation](https://app-desktop.paperoffice.com/en/api).
 
 ### Key Features
 
