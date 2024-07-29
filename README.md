@@ -28,7 +28,7 @@
 - **Flexible Output Handling**: Processed files can be saved to custom output directories.
 - **Error Handling**: Robust error management to ensure smooth operation even with large batches of files.
 
-<img width="574" alt="PaperOfficeAPIWrapper" src="https://github.com/user-attachments/assets/d328fd15-a9d6-4501-b3d1-8d786362e4f9">
+<img alt="PaperOfficeAPIWrapper" src="https://github.com/user-attachments/assets/d328fd15-a9d6-4501-b3d1-8d786362e4f9">
 
 ## Getting Started
 
