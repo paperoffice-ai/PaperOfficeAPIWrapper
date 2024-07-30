@@ -487,6 +487,9 @@ class API_file_processor:
 
     # 3. Send Request Job/status
     def send_request_job_status(self, endpoint_url):
+        """ 
+        Status options: 'queued', 'waiting4files', 'processing', 'completed', 'failed', 'timeout'
+        """
         logging.debug('START - Send request Status') 
   
         try:
