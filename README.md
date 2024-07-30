@@ -1,3 +1,5 @@
+![Static Badge](https://img.shields.io/badge/python-blue?style=flat&logo=python&logoColor=%23ffffff) ![Version](https://img.shields.io/badge/License-Non%20Commercial-orange) ![Version](https://img.shields.io/badge/version-R247275-green)
+
 # PaperOfficeAPIWrapper
 
 ## Table of Contents
@@ -17,16 +19,35 @@
 
 ## Overview
 
-**PaperOfficeAPIWrapper** is a powerful and flexible tool designed to streamline file processing through automated API interactions. This utility empowers users to efficiently manage and process files across multiple directories, each with its own dedicated API endpoint.
+**PaperOfficeAPIWrapper** is a powerful utility designed to streamline file processing through automated API interactions. It enables efficient management and processing of files across multiple directories, each with its own dedicated API endpoint.
+
+This versatile Python script can be run on any platform, including Linux, macOS, and Windows. For Windows users, a pre-compiled executable is also available for convenience.
+
+- Run the Python script on Linux, macOS, or Windows
+- Available as a pre-compiled [Windows executable](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R247275/com.paperoffice.apiwrapper.R247275.exe)
+- Access to multiple PaperOffice endpoints, including:
+  - Katana Smart AI
+  - PDF Studio
+  - Image Studio
+  - Vision API
+  - Creator API
+  - Interceptor API
+  - Forexbroker API
+
+For a complete list of available endpoints, please refer to our [API documentation](https://app-desktop.paperoffice.com/en/api).
 
 ### Key Features
 
-- **Multi-folder Processing**: Configure and process files from multiple input folders simultaneously.
-- **Customizable API Endpoints**: Each folder can be linked to a specific API endpoint for tailored processing.
-- **Automated Workflow**: Files are automatically sent to designated APIs and results are saved to specified output locations.
-- **Configurable**: Easy-to-use JSON configuration file for setting up folders and API endpoints.
-- **Flexible Output Handling**: Processed files can be saved to custom output directories.
-- **Error Handling**: Robust error management to ensure smooth operation even with large batches of files.
+- **Cross-Platform Compatibility**: Run the Python script on Linux, macOS, or Windows
+- **Windows Executable**: Pre-compiled version available for easy use on Windows systems
+- **Multi-folder Processing**: Configure and process files from multiple input folders
+- **Customizable API Endpoints**: Each folder can be linked to a specific API endpoint for tailored processing
+- **Automated Workflow**: Files are automatically sent to designated APIs and results are saved to specified output locations
+- **Configurable**: Easy-to-use JSON configuration file for setting up folders and API endpoints
+- **Flexible Output Handling**: Processed files can be saved to custom output directories
+- **Error Handling**: Robust error management to ensure smooth operation even with large batches of files
+
+<img alt="PaperOfficeAPIWrapper" src="https://github.com/user-attachments/assets/d328fd15-a9d6-4501-b3d1-8d786362e4f9">
 
 ## Getting Started
 
@@ -190,7 +211,7 @@ python3 src/main.py
 python src/main.py
 ```
 
-A compiled executable `com.paperoffice.apiwrapper.<release>.exe` is available inside the windows directory. To use this:
+A compiled executable [com.paperoffice.apiwrapper.R247275.exe](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R247275/com.paperoffice.apiwrapper.R247275.exe) is available inside the windows directory. To use this:
 
 1. Navigate to the `windows` directory.
 2. Download `com.paperoffice.apiwrapper.<release>.exe`, `edit.env`, and `api_file_processor_config.json`.
@@ -211,7 +232,7 @@ A compiled executable `com.paperoffice.apiwrapper.<release>.exe` is available in
 ## License
 **Custom Non-Commercial License**
 
-Copyright (c) 2024 PaperOffice AI -> Copyright (c) 2024 PaperOffice Limited Europe
+Copyright (c) 2024 PaperOffice Limited Europe
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, merge, and distribute the Software for non-commercial purposes only, subject to the following conditions:
 
