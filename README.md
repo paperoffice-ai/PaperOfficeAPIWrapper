@@ -26,13 +26,10 @@ This versatile Python script can be run on any platform, including Linux, macOS,
 - Run the Python script on Linux, macOS, or Windows
 - Available as a pre-compiled [Windows executable](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R247275/com.paperoffice.apiwrapper.R247275.exe)
 - Access to multiple PaperOffice endpoints, including:
-  - Katana Smart AI
   - PDF Studio
   - Image Studio
   - Vision API
   - Creator API
-  - Interceptor API
-  - Forexbroker API
 
 For a complete list of available endpoints, please refer to our [API documentation](https://app-desktop.paperoffice.com/en/api).
 
