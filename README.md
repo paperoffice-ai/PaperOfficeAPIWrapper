@@ -1,4 +1,4 @@
-![Static Badge](https://img.shields.io/badge/python-blue?style=flat&logo=python&logoColor=%23ffffff) ![Version](https://img.shields.io/badge/License-Non%20Commercial-orange) ![Version](https://img.shields.io/badge/version-R247275-green)
+![Python](https://img.shields.io/badge/python-blue?style=flat&logo=python&logoColor=%23ffffff) ![License](https://img.shields.io/badge/License-Non%20Commercial-orange) ![Version](https://img.shields.io/badge/version-R247275-green)
 
 # PaperOfficeAPIWrapper
 
