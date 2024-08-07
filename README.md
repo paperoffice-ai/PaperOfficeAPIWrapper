@@ -142,16 +142,21 @@ Modify the `api_file_processor_config.json` file in the `src` folder to specify 
             "folder_path": "/path/to/input_folder1",
             "output_folder": "/path/to/output_folder1",
             "endpoint": {
-                "url": "https://api-dev.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
-                "job_instructions_json": {"language":"en"}
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
+                "payload": {
+                    "job_instructions___language":"en"
+                }
             }
         },
         {
             "folder_path": "/path/to/input_folder2",
             "output_folder": "/path/to/output_folder2",
             "endpoint": {
-                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___pdf_to_searchable_pdf",
-                "job_instructions_json": {"language":"en"}
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___jpg_to_pdf",
+                "payload": {
+                    "job_instructions___filename": "my_pdf_file.pdf",
+                    "job_instructions___compression": "medium"
+                }
             }
         }
     ]
@@ -179,17 +184,19 @@ Modify the `api_file_processor_config.json` file in the `src` folder to specify 
 
 | Field | Description |
 |-------|-------------|
+| `folders` | Contains 1 or more folders to process |
 | `folder_path` | Directory containing files to process |
 | `output_folder` | Directory where processed files will be saved |
+| `endpoint` | Contains the URL and payload settings |
 | `url` | API endpoint URL for processing |
-| `job_instructions_json` | Specific instructions for the API job (e.g., language settings) |
+| `payload` | The payload for the API job (e.g., language settings) |
 
 
 **Note:** 
 - Successfully processed files are moved to an `api_processed_files` subfolder within the input folder.
 - Ensure you have read/write permissions for all specified folders.
 - For more examples, refer to `api_file_processor_config_example.json` in the `src` folder.
-- **Important:** For a comprehensive list of all available endpoints and `job_instructions_json` parameters, please refer to our API documentation at: https://app-desktop.paperoffice.com/en/api
+- **Important:** For a comprehensive list of all available endpoints and `payload` parameters, please refer to our API documentation at: https://app-desktop.paperoffice.com/en/api
 
 ## Running the Script
 
