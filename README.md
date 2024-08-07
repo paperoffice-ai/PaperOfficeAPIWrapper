@@ -1,4 +1,4 @@
-![Python](https://img.shields.io/badge/python-blue?style=flat&logo=python&logoColor=%23ffffff) ![License](https://img.shields.io/badge/License-Non%20Commercial-orange) ![Version](https://img.shields.io/badge/version-R247275-green)
+![Python](https://img.shields.io/badge/python-blue?style=flat&logo=python&logoColor=%23ffffff) ![License](https://img.shields.io/badge/License-Non%20Commercial-orange) ![Version](https://img.shields.io/badge/version-R240807-green)
 
 # PaperOfficeAPIWrapper
 
@@ -208,7 +208,7 @@ python3 src/main.py
 python src/main.py
 ```
 
-A compiled executable [com.paperoffice.apiwrapper.R247275.exe](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R247275/com.paperoffice.apiwrapper.R247275.exe) is available inside the windows directory. To use this:
+A compiled executable `com.paperoffice.apiwrapper.<release>.exe` is available inside the windows directory. To use this:
 
 1. Navigate to the `windows` directory.
 2. Download `com.paperoffice.apiwrapper.<release>.exe`, `edit.env`, and `api_file_processor_config.json`.

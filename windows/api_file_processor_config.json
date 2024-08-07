@@ -1,11 +1,13 @@
 {
     "folders": [
         {
-            "folder_path": "C:/Users/user/path/to/input_folder1",
-            "output_folder": "C:/Users/user/path/to/output_folder1",
+            "folder_path": "C:/path/to/input_folder1",
+            "output_folder": "C:/path/to/output_folder1",
             "endpoint": {
-                "url": "https://api-dev.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
-                "job_instructions_json": {"language":"en"}
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
+                "payload": {
+                    "job_instructions___language":"en"
+                }
             }
         }
     ]

@@ -14,6 +14,13 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
+version = "R240807"
+border = "=" * 79
+print(border)
+print(f"\n\tPaperOffice API Wrapper", version)
+print(f"\tGitHub: https://github.com/paperoffice-ai/PaperOfficeAPIWrapper")
+print(f"\tAPI Documentation: https://app-desktop.paperoffice.com/en/api\n")
+print(border + "\n")
 
 # Check if the Python version is at least 3.7
 if sys.version_info < (3, 7):
@@ -148,7 +155,7 @@ def load_env_file(root_path, env_file_name=".env"):
 def validate_json_keys(json_data) -> None:
     logging.debug(f'START - Validating json keys.')
     required_folder_keys = {"folder_path", "output_folder", "endpoint"}
-    required_endpoint_keys = {"url", "job_instructions_json"}
+    required_endpoint_keys = {"url", "payload"}
 
     if "folders" not in json_data:
         logging.error(f'Invalid JSON format, "folders" key is missing.')
@@ -161,7 +168,7 @@ def validate_json_keys(json_data) -> None:
 
         folder_keys = set(folder.keys())
         if not required_folder_keys.issubset(folder_keys):
-            logging.error(f'Invalid JSON format, invalid key for folder.')
+            logging.error(f'Invalid JSON format, invalid or missing key for folder.')
             sys_exit()
 
         endpoint = folder.get("endpoint", {})
@@ -171,7 +178,7 @@ def validate_json_keys(json_data) -> None:
 
         endpoint_keys = set(endpoint.keys())
         if not required_endpoint_keys.issubset(endpoint_keys):
-            logging.error(f'Invalid JSON format, invalid keys in "endpoint".')
+            logging.error(f'Invalid JSON format, invalid or missing key in "endpoint".')
             sys_exit()
                         
     logging.debug(f'END - json keys validated.')
@@ -346,10 +353,15 @@ class API_file_processor:
         logging.debug(f'START - Send request') 
         endpoint_url = endpoint["url"]   
         
-        json_string = json.dumps(endpoint["job_instructions_json"])  
-        payload = {'job_instructions_json': json_string}        
+        payload = endpoint["payload"] if endpoint["payload"] else {}
+
+        if type(payload) != dict:
+            logging.warning(f'Invalid payload: "{str(payload)}" in "api_file_processor_config.json", sending empty payload.') 
+            payload = {}
+             
+        payload["paperoffice_device_origin"] = "paperoffice_api_wrapper"
         
-        logging.debug(f'Payload: {str(payload)}')        
+        logging.debug(f'Payload: {str(payload)}')     
         
         headers = {}
         
@@ -444,24 +456,23 @@ class API_file_processor:
     def check_job_status_response_status_key(self, response_json):
         logging.debug(f'START - Checking response staus key.')
         """ 
-            queued
-            processing
-            completed
-            failed
-            error
+        Status options: 'queued', 'waiting4files', 'processing', 'completed', 'failed', 'timeout'
         """
         logging.debug(f'Request response: {response_json}')
         response_status = response_json["status"]
-        try:
+        try:                    
             if response_status == "completed":
                 return "completed"        
-            if response_status == "failed":
+            elif response_status == "failed":
                 return "failed"               
             elif response_status == "processing":
                 return "processing"
             elif response_status == "queued":
                 return "queued"
-            elif response_status == "error":
+            elif response_status == "error":                
+                if "RATE_LIMIT_EXCEEDED" in response_json["message"]:
+                    return "processing"
+                
                 response_code = response_json["code"]
                 if response_code == 429:
                     logging.error('Request limit exceeded for endpoint: "job/upload". Status code: 429. Please try again later or consider upgrading your plan.')
@@ -487,9 +498,6 @@ class API_file_processor:
 
     # 3. Send Request Job/status
     def send_request_job_status(self, endpoint_url):
-        """ 
-        Status options: 'queued', 'waiting4files', 'processing', 'completed', 'failed', 'timeout'
-        """
         logging.debug('START - Send request Status') 
   
         try:
@@ -621,7 +629,9 @@ class API_file_processor:
             skip_folder = False
             skip_file = False
             downloadlink = None
+            time.sleep(3)
             for i in range(100):
+                
                 response_json, status_code = self.send_request_job_status(endpoint_url)
                 
                 if not status_code:
@@ -661,7 +671,15 @@ class API_file_processor:
                     skip_file = True
                     break                    
                 
-                time.sleep(3) 
+                
+                # Get next_call_in_seconds
+                next_call_in_seconds = response_json["next_call_in_seconds"]
+                logging.info(f'Check job status interval for API key is {next_call_in_seconds} seconds.')
+                for i in range(next_call_in_seconds, -1, -1):
+                    print(f'Next job status check in: {i} seconds', end="\r")
+                    sys.stdout.flush()
+                    time.sleep(1)
+                time.sleep(0.3)
                               
             if skip_folder:
                 break

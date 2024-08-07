@@ -1,27 +1,71 @@
 {
     "folders": [
         {
-            "folder_path": "C:/Users/user/path/to/input_folder1",
-            "output_folder": "C:/Users/user/path/to/output_folder1",
+            "folder_path": "C:/path/to/input_folder1",
+            "output_folder": "C:/path/to/output_folder1",
             "endpoint": {
-                "url": "https://api-dev.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
-                "job_instructions_json": {"language":"en"}
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
+                "payload": {
+                    "job_instructions___language":"en"
+                }
             }
         },
         {
-            "folder_path": "C:/Users/user/path/to/input_folder2",
-            "output_folder": "C:/Users/user/path/to/output_folder2",
+            "folder_path": "C:/path/to/input_folder2",
+            "output_folder": "C:/path/to/output_folder2",
             "endpoint": {
-                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___pdf_to_searchable_pdf",
-                "job_instructions_json": {"language":"en"}
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___file_to_searchable_pdf",
+                "payload": {
+                    "job_instructions___language":"en"
+                }
             }
         },
         {
-            "folder_path": "C:\\Users\\user\\path\\to\\input_folder3",
-            "output_folder": "C:\\Users\\user\\path\\to\\output_folder3",
+            "folder_path": "C:/path/to/input_folder3",
+            "output_folder": "C:/path/to/output_folder3",
             "endpoint": {
                 "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___compress_pdf",
-                "job_instructions_json": null
+                "payload": {
+                    "job_instructions___compression": "medium"
+                }
+            }
+        },
+        {
+            "folder_path": "C:/path/to/input_folder4",
+            "output_folder": "C:/path/to/output_folder4",
+            "endpoint": {
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___compress_pdf",
+                "payload": {
+                    "job_instructions___compression": "medium",
+                    "job_instructions___password": "my_safe_password"
+                }
+            }
+        },
+        {
+            "folder_path": "C:\\path\\to\\input_folder5",
+            "output_folder": "C:\\path\\to\\output_folder5",
+            "endpoint": {
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___jpg_to_pdf",
+                "payload": null
+            }
+        },
+        {
+            "folder_path": "C:\\path\\to\\input_folder\\input_folder6",
+            "output_folder": "C:\\path\\to\\output_folder6",
+            "endpoint": {
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___jpg_to_pdf",
+                "payload": {}
+            }
+        },
+        {
+            "folder_path": "C:\\path\\to\\input_folder7",
+            "output_folder": "C:\\path\\to\\output_folder7",
+            "endpoint": {
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___jpg_to_pdf",
+                "payload": {
+                    "job_instructions___filename": "my_pdf_file.pdf",
+                    "job_instructions___compression": "low"
+                }
             }
         }
     ]
