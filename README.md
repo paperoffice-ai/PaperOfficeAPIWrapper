@@ -24,7 +24,7 @@
 This versatile Python script can be run on any platform, including Linux, macOS, and Windows. For Windows users, a pre-compiled executable is also available for convenience.
 
 - Run the Python script on Linux, macOS, or Windows
-- Available as a pre-compiled [Windows executable](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R247275/com.paperoffice.apiwrapper.R247275.exe)
+- Available as a pre-compiled [Windows executable](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R240807/com.paperoffice.apiwrapper.R240807.exe)
 - Access to multiple PaperOffice endpoints, including:
   - PDF Studio
   - Image Studio
@@ -208,13 +208,13 @@ python3 src/main.py
 python src/main.py
 ```
 
-A compiled executable `com.paperoffice.apiwrapper.<release>.exe` is available inside the windows directory. To use this:
+A compiled executable [com.paperoffice.apiwrapper.R240807.exe](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R240807/com.paperoffice.apiwrapper.R240807.exe) is available inside the windows directory. To use this:
 
 1. Navigate to the `windows` directory.
-2. Download `com.paperoffice.apiwrapper.<release>.exe`, `edit.env`, and `api_file_processor_config.json`.
+2. Download `com.paperoffice.apiwrapper.R240807.exe`, `edit.env`, and `api_file_processor_config.json`.
 3. Place all files in the same folder.
 4. Configure `edit.env` and `api_file_processor_config.json` as described above.
-5. Run `com.paperoffice.apiwrapper.<release>.exe`.
+5. Run `com.paperoffice.apiwrapper.R240807.exe`.
 
 ## Troubleshooting
 
