@@ -1,5 +1,6 @@
 # Ignore all .log files in any directory
 **/*.log
+dev.py
 
 # Ignore compiled Python files
 **/*.pyc

@@ -92,7 +92,7 @@ For a complete list of available endpoints, please refer to our [API documentati
 ### Quick Start
 
 1. Configure your environment variables in `src/.env` (see Configuration section for details).
-2. Set up your folder and API configurations in `src/api_file_processor_config.json`.
+2. Set up your folder and API configurations in `src/folder_settings.json`.
 3. Run the main script:
 
    ```bash
@@ -130,7 +130,7 @@ LOG_FILE_BACKUP_COUNT=5
 
 ### 2. Configure API and Folder Settings
 
-Modify the `api_file_processor_config.json` file in the `src` folder to specify input/output folders and API endpoints. The configuration supports multiple folders, each with its own input/output paths and API endpoint.
+Modify the `folder_settings.json` file in the `src` folder to specify input/output folders and API endpoints. The configuration supports multiple folders, each with its own input/output paths and API endpoint.
 
 
 #### Example Configuration:
@@ -193,14 +193,14 @@ Modify the `api_file_processor_config.json` file in the `src` folder to specify 
 
 
 **Note:** 
-- Successfully processed files are moved to an `api_processed_files` subfolder within the input folder.
+- Successfully processed files are moved to an `processed_originals` subfolder within the input folder.
 - Ensure you have read/write permissions for all specified folders.
-- For more examples, refer to `api_file_processor_config_example.json` in the `src` folder.
-- **Important:** For a comprehensive list of all available endpoints and `payload` parameters, please refer to our API documentation at: https://app-desktop.paperoffice.com/en/api
+- For more examples, refer to `folder_settings.template.json` in the `src` folder.
+- **Important:** For a comprehensive list of all available endpoints and `payload` parameters, please refer to our [API documentation](https://app-desktop.paperoffice.com/en/api).
 
 ## Running the Script
 
-After configuring the `.env` and `api_file_processor_config.json` files, execute:
+After configuring the `.env` and `folder_settings.json` files, execute:
 
 ### For Unix-based Systems (Linux, macOS)
 
@@ -218,9 +218,9 @@ python src/main.py
 A compiled executable [com.paperoffice.apiwrapper.R240807.exe](https://github.com/paperoffice-ai/PaperOfficeAPIWrapper/releases/download/R240807/com.paperoffice.apiwrapper.R240807.exe) is available inside the windows directory. To use this:
 
 1. Navigate to the `windows` directory.
-2. Download `com.paperoffice.apiwrapper.R240807.exe`, `edit.env`, and `api_file_processor_config.json`.
+2. Download `com.paperoffice.apiwrapper.R240807.exe`, `edit.env`, and `folder_settings.json`.
 3. Place all files in the same folder.
-4. Configure `edit.env` and `api_file_processor_config.json` as described above.
+4. Configure `edit.env` and `folder_settings.json` as described above.
 5. Run `com.paperoffice.apiwrapper.R240807.exe`.
 
 ## Troubleshooting
@@ -229,7 +229,7 @@ A compiled executable [com.paperoffice.apiwrapper.R240807.exe](https://github.co
 - Verify that your API key is valid and correctly entered in the `.env` file.
 - Check that the specified input and output folders exist and are accessible.
 - Review the log files for any error messages or warnings.
-- If you're unsure about the configuration format, refer to `api_file_processor_config_example.json` for guidance.
+- If you're unsure about the configuration format, refer to `folder_settings.template.json` for guidance.
 
 
 

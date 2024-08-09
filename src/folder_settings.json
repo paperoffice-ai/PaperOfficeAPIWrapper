@@ -4,9 +4,9 @@
             "folder_path": "./tests/input_folder",
             "output_folder": "./tests/output_folder",
             "endpoint": {
-                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___jpg_to_pdf",
+                "url": "https://api-dev.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
                 "payload": {
-                    "job_instructions___filename": "converted2pdf.pdf"
+                    "job_instructions___language": "en"
                 }
             }
         }
