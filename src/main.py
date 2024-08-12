@@ -1,6 +1,7 @@
 # Standard library imports
 import json
 import logging
+import threading
 import os
 import re
 import shutil
@@ -219,6 +220,7 @@ class APIWrapper:
     def __init__(self, folder_settings, api_key) -> None:
         self.folder_settings = folder_settings
         self.api_key = api_key
+        self.skip_folder = False
         self.total_folders = 0
         self.total_files = 0
         logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: APIWrapper initialized with provided configuration.')
@@ -568,11 +570,106 @@ class APIWrapper:
         return new_filename
 
 
+    # Process file in individual thread for parallel processing
+    def process_file_in_thread(self, response_json, file, file_name, processed_files_folder, output_folder) -> str:
+        # 2. Upload file
+        # Get assigned server and job ID
+        job_assigned_api_endpoint = response_json["job_assigned_api_endpoint"]
+        job_id = response_json["job_id"]            
+        endpoint_url = f'https://{job_assigned_api_endpoint}/V5/job/upload/{job_id}'
+        response_json, status_code = self.send_request_job_upload(endpoint_url, file, file_name)
+        
+        if not status_code:
+            return
+        
+        if not self.check_response_status_code(status_code, endpoint_url, file_name):
+            self.skip_folder = True
+            return
+        
+        if not response_json:
+            logging.error(f'Request job/upload failed for file: {file_name}. Skipping file.')
+            return 
+        
+        if self.check_job_upload_response_status_key(response_json, file_name):
+            logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: "{file_name}" queued')
+        else:
+            return
+        
+        
+        # 3. Check job status
+        logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Checking job status for "{file_name}".')
+        endpoint_url = f'https://{job_assigned_api_endpoint}/V5/job/status/{job_id}'
+        
+        time.sleep(0.5)
+        for i in range(120):                
+            response_json, status_code = self.send_request_job_status(endpoint_url, file_name)
+            
+            if not status_code:
+                return
+            
+            if not self.check_response_status_code(status_code, endpoint_url, file_name):
+                self.skip_folder = True
+                return 
+        
+            if not response_json:
+                logging.error(f'Request job/status failed for file: {file_name}. Skipping file.')
+                return
+            
+            job_response_status = self.check_job_status_response_status_key(response_json, file_name)
+            if job_response_status == "queued": 
+                logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: "{file_name}" queued, waiting for free slot.')
+            elif job_response_status == "processing":
+                logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: "{file_name}" is being processed.')
+            elif job_response_status == "failed":
+                logging.error(f'"{file_name}" processing has failed please try again.')
+                return
+            elif job_response_status == "completed":
+                logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: "{file_name}" processing completed. Proceed to downlad.')
+                downloadlink = response_json["downloadlink"]
+                logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Downloadlink for "{file_name}": {downloadlink}')
+                break
+            else:
+                logging.error(f'"{file_name}" processing error. Skipping file, please try again.')
+                return
+            
+            if i >= 119:
+                logging.error(f'"{file_name}" processing is taking too long. Skipping file, please try again.')
+                return                    
+            
+            
+            # Get next_call_in_seconds
+            next_call_in_seconds = response_json["next_call_in_seconds"]
+            logging.info(f'Next job status check for "{file_name}" in {next_call_in_seconds} seconds.')
+            logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Check job status interval for API key is {next_call_in_seconds} seconds.')
+            time.sleep(next_call_in_seconds)
+            time.sleep(0.3)              
+        
+        # 4. Download file
+        move_processed_file = False
+        if downloadlink:                
+            if self.download_processed_job_files(downloadlink, output_folder, file_name):
+                move_processed_file = True
+        else:
+            logging.error(f'File download-link not available for "{file_name}". skipping file.')
+            return
+        
+        
+        if move_processed_file:    
+            self.move_file_with_timestamp(file, file_name, processed_files_folder)
+        
+        # Add 1 to total processed files
+        self.total_files += 1
+
+
     # Process files
     def process_files(self, folder_files_list, endpoint, processed_files_folder, output_folder) -> None:
         logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: START - process_files: {folder_files_list}') 
         logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Endoint parameters: {endpoint}') 
+        self.threads = []
         for file in folder_files_list:
+            if self.skip_folder:
+                self.skip_folder = False
+                break
             file_name = Path(file).name
             logging.info(f'Processing file: "{file_name}".')
             
@@ -595,109 +692,13 @@ class APIWrapper:
             else:
                 continue
             
-            # 2. Upload file
-            # Get assigned server and job ID
-            job_assigned_api_endpoint = response_json["job_assigned_api_endpoint"]
-            job_id = response_json["job_id"]            
-            endpoint_url = f'https://{job_assigned_api_endpoint}/V5/job/upload/{job_id}'
-            response_json, status_code = self.send_request_job_upload(endpoint_url, file, file_name)
+            # Run each file in individual thread
+            thread_name = f'thread_{file_name}'
+            thread = threading.Thread(target=self.process_file_in_thread, args=(response_json, file, file_name, processed_files_folder, output_folder), name=thread_name)
+            self.threads.append(thread)
+            thread.start()        
             
-            if not status_code:
-                continue
-            
-            if not self.check_response_status_code(status_code, endpoint_url, file_name):
-                break
-            
-            if not response_json:
-                logging.error(f'Request job/upload failed for file: {file_name}. Skipping file.')
-                continue 
-            
-            if self.check_job_upload_response_status_key(response_json, file_name):
-                logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: "{file_name}" queued')
-            else:
-                continue
-            
-            
-            # 3. Check job status
-            logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Checking job status for "{file_name}".')
-            endpoint_url = f'https://{job_assigned_api_endpoint}/V5/job/status/{job_id}'
-
-            skip_folder = False
-            skip_file = False
-            downloadlink = None
-            time.sleep(0.5)
-            for i in range(130):                
-                response_json, status_code = self.send_request_job_status(endpoint_url, file_name)
-                
-                if not status_code:
-                    skip_file = True
-                    break
-                
-                if not self.check_response_status_code(status_code, endpoint_url, file_name):
-                    skip_folder = True
-                    break 
-            
-                if not response_json:
-                    logging.error(f'Request job/status failed for file: {file_name}. Skipping file.')
-                    skip_file = True
-                    break
-                
-                job_response_status = self.check_job_status_response_status_key(response_json, file_name)
-                if job_response_status == "queued": 
-                    logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: "{file_name}" queued, waiting for free slot.')
-                elif job_response_status == "processing":
-                    logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: "{file_name}" is being processed.')
-                elif job_response_status == "failed":
-                    logging.error(f'"{file_name}" processing has failed please try again.')
-                    skip_file = True
-                    break
-                elif job_response_status == "completed":
-                    logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: "{file_name}" processing completed. Proceed to downlad.')
-                    downloadlink = response_json["downloadlink"]
-                    logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Downloadlink for "{file_name}": {downloadlink}')
-                    break
-                else:
-                    logging.error(f'"{file_name}" processing error, please try again.')
-                    skip_file = True
-                    break
-                
-                if i >= 120:
-                    logging.error(f'"{file_name}" processing is taking too long, please try again.')
-                    skip_file = True
-                    break                    
-                
-                
-                # Get next_call_in_seconds
-                next_call_in_seconds = response_json["next_call_in_seconds"]
-                logging.info(f'Next job status check for "{file_name}" in {next_call_in_seconds} seconds.')
-                logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Check job status interval for API key is {next_call_in_seconds} seconds.')
-                for i in range(next_call_in_seconds, -1, -1):
-                    print(f'Next job status check in: {i} seconds', end="\r")
-                    sys.stdout.flush()
-                    time.sleep(1)
-                time.sleep(0.3)
-                              
-            if skip_folder:
-                break
-            if skip_file:
-                continue                
-            
-            # 4. Download file
-            move_processed_file = False
-            if downloadlink:                
-                if self.download_processed_job_files(downloadlink, output_folder, file_name):
-                    move_processed_file = True
-            else:
-                logging.error(f'File download-link not available for "{file_name}". skipping file.')
-                continue
-            
-            
-            if move_processed_file:    
-                self.move_file_with_timestamp(file, file_name, processed_files_folder)
-            
-            # Add 1 to total processed files
-            self.total_files += 1
-        
+                    
         logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: END - All files processed from folder.')
             
 
@@ -747,11 +748,12 @@ class APIWrapper:
 if __name__ == "__main__":
     try:        
         start_time = time.time()
-        start_datetime = datetime.now()
+        start_datetime = datetime.now()        
         
         root_path = get_root_path()
         env_config = load_env_file(root_path)              
-        setup_logging(root_path / "process.log", env_config)        
+        setup_logging(root_path / "process.log", env_config)
+        logging.info('Processing started')       
         logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Debugging application flow - START')
         logging.debug(f'{logging.currentframe().f_code.co_name}:{logging.currentframe().f_lineno}: Loaded environment variables: {str(env_config)}')
         folder_settings = read_folder_settings_file(root_path)   
@@ -760,6 +762,10 @@ if __name__ == "__main__":
         # Initialize the APIWrapper class
         aw = APIWrapper(folder_settings, env_config["api_key"])        
         aw.process_all_folders()
+        
+        # Join all threads and wait for all threads to finish
+        for thread in aw.threads:
+            thread.join()   
         
         end_time = time.time()
         end_datetime = datetime.now() 
