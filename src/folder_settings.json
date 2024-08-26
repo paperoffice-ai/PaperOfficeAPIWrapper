@@ -1,10 +1,11 @@
 {
     "folders": [
-        {
+        {   
+            "recursive": false,
             "folder_path": "./tests/input_folder",
             "output_folder": "./tests/output_folder",
             "endpoint": {
-                "url": "https://api-dev.paperoffice.com/V5/job/add/pdfstudio___pdf_to_text",
+                "url": "https://api.paperoffice.com/V5/job/add/pdfstudio___pdf_to_searchable_pdf",
                 "payload": {
                     "job_instructions___language": "en"
                 }
